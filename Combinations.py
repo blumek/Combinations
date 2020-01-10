@@ -1,6 +1,6 @@
 class MinimalChangeCombinations:
-    def __init__(self, set_size):
-        self.set_size = set_size
+    def __init__(self, elements):
+        self.elements = list(elements)
 
     def successor(self, subset):
         return self.unrank(self.rank(subset) + 1)
@@ -9,10 +9,11 @@ class MinimalChangeCombinations:
         return self.unrank(self.rank(subset) - 1)
 
     def rank(self, subset):
-        gray_code = [0] * self.set_size
-        for i in range(0, self.set_size):
-            if i + 1 in subset:
+        gray_code = [0] * len(self.elements)
+        for i in range(0, len(self.elements)):
+            if self.elements[i] in subset:
                 gray_code[i] = 1
+
         binary = self.__gray_code_to_binary(gray_code)
         return int("".join(map(str, binary)), 2)
 
@@ -22,12 +23,12 @@ class MinimalChangeCombinations:
         subset = set()
         for i in range(0, len(gray_code)):
             if gray_code[i] == 1:
-                subset.add(i+1)
+                subset.add(self.elements[i])
         return subset
 
     def __int_to_binary(self, integer):
         binary = list(map(int, bin(integer)[2:]))
-        return [0] * (self.set_size - len(binary)) + binary if len(binary) < self.set_size else binary
+        return [0] * (len(self.elements) - len(binary)) + binary if len(binary) < len(self.elements) else binary
 
     @staticmethod
     def __binary_to_gray_code(binary):
